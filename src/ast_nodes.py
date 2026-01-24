@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Any
 
 @dataclass
 class ASTNode:
@@ -20,12 +20,12 @@ class VariableExpr(Expr):
 @dataclass
 class BinaryExpr(Expr):
     left: Expr
-    operator: str
+    operator: Any
     right: Expr
 
 @dataclass
 class UnaryExpr(Expr):
-    operator: str
+    operator: Any
     operand: Expr
 
 @dataclass
