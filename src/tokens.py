@@ -56,4 +56,5 @@ class Token:
         self.value = value
 
     def __repr__(self):
-        return f"Token({self.type.name}, {repr(self.value)})"
+        val_str = f", {repr(self.value)}" if self.value is not None else ""
+        return f"Token({self.type.name}{val_str})"
