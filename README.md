@@ -53,7 +53,7 @@ Il processo di creazione di un eseguibile avviene in tre passaggi: compilazione 
 Utilizza main.py per compilare un file .mini. Puoi usare il flag --debug per vedere i dettagli delle fasi intermedie.
 
 \# Generazione del codice intermedio del programma .mini
-python main.py programma.mini -o output.ll
+python aether.py [programma].ae -o output.ll
 
 \# Compilazione del programma
 clang --target=x86_64-pc-windows-gnu -c output.ll -o output.o
@@ -62,7 +62,7 @@ clang --target=x86_64-pc-windows-gnu -c output.ll -o output.o
 gcc -c runtime.c -o runtime.o
 
 \# Linking del codice e generazione dell'eseguibile
-gcc output.o runtime.o -o programma.exe
+gcc output.o runtime.o -o [programma].exe
 
 ## 🧪 Testing
 Il progetto include una suite di test completa basata su unittest.
@@ -71,7 +71,7 @@ Eseguire tutti i test:
  python -m unittest discover tests
 
 ## ✨ Funzionalità del Linguaggio
-### Sintassi Base
+### Sintassi Base - .ae
     // Funzioni esterne (FFI)
     extern func print(n);
 
