@@ -212,5 +212,48 @@ class TestParser(unittest.TestCase):
         with self.assertRaises(SyntaxError):
             parser.parse_decl()
 
+    def test_assegnamento_a_letterale(self):
+        # 10 = x; -> Errore, non puoi assegnare a un numero
+        tokens = [
+            Token(TokenType.INTEGER, 10),
+            Token(TokenType.ASSIGN),
+            Token(TokenType.ID, "x"),
+            Token(TokenType.SEMI),
+            Token(TokenType.EOF)
+        ]
+        parser = self.create_parser(tokens)
+        with self.assertRaises(SyntaxError): # O l'eccezione specifica del tuo parser
+            parser.parse_stmt()
+
+    def test_parentesi_non_bilanciate(self):
+        # (1 + 2  -> Manca parentesi chiusa
+        tokens = [
+            Token(TokenType.LPAREN),
+            Token(TokenType.INTEGER, 1),
+            Token(TokenType.PLUS),
+            Token(TokenType.INTEGER, 2),
+            Token(TokenType.SEMI), # O EOF diretto
+            Token(TokenType.EOF)
+        ]
+        parser = self.create_parser(tokens)
+        with self.assertRaises(SyntaxError):
+            parser.parse_stmt()
+
+    def test_if_senza_body(self):
+        # if (x < 10) ; -> Manca il blocco {}
+        tokens = [
+            Token(TokenType.IF),
+            Token(TokenType.LPAREN),
+            Token(TokenType.ID, "x"),
+            Token(TokenType.LT),
+            Token(TokenType.INTEGER, 10),
+            Token(TokenType.RPAREN),
+            Token(TokenType.SEMI),
+            Token(TokenType.EOF)
+        ]
+        parser = self.create_parser(tokens)
+        with self.assertRaises(SyntaxError): # Si aspetta LBRACE
+            parser.parse_stmt()
+
 if __name__ == '__main__':
     unittest.main()

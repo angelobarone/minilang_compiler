@@ -90,6 +90,12 @@ class TestLexer(unittest.TestCase):
             token = lexer.get_next_token()
             self.assertEqual(token.type, exp_type, f"Atteso {exp_type}, ricevuto {token.type}")
 
+    def test_identificatore_inizia_con_numero(self):
+        lexer = Lexer("1var")
+        t1 = lexer.get_next_token()
+        self.assertEqual(t1.type, TokenType.INTEGER)
+        self.assertEqual(lexer.get_next_token().type, TokenType.ID)
+
     def test_gestione_errori(self):
         lexer = Lexer("&")
         with self.assertRaises(Exception):

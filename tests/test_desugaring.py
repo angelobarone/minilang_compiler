@@ -49,5 +49,14 @@ class TestDesugaring(unittest.TestCase):
         while_stmt = stmts[1]
         self.assertEqual(while_stmt.condition.operator, TokenType.LT)
 
+    def test_pipe_invalid_right_operand(self):
+        # x |> 5 -> Errore, 5 non è chiamabile
+        pipe_expr = ast.PipeExpr(
+            left=ast.VariableExpr("x"),
+            right=ast.LiteralExpr(5)
+        )
+        with self.assertRaises(ValueError) as cm:
+            self.desugarer.visit_PipeExpr(pipe_expr)
+
 if __name__ == '__main__':
     unittest.main()
