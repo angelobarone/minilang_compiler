@@ -1,4 +1,4 @@
-# Compilatore Mini-Linguaggio (MiniLang) con Backend LLVM
+# Aether - Lightweight Syntax and Affidability
 
 **Studente:** Angelo Barone  
 **Corso:** Ingegneria dei Linguaggi di Programmazione
@@ -8,6 +8,8 @@ Questo progetto implementa un compilatore completo per un linguaggio imperativo 
 Il compilatore include una pipeline moderna composta da: Lexer manuale, Parser ricorsivo discendente, Analisi Semantica (Scope & Arity check), Desugaring (Pipe & Repeat loop), Ottimizzatore (Constant Folding & DCE) e Code Generation.
 
 ---
+## Perchè Aether?
+Lo scopo del linguaggio trova fondamento nella realizzazione di un medium affidabile che connetta la leggerezza della sintassi alla potenza della macchina.
 
 ## 📋 Requisiti e Dipendenze
 
@@ -18,6 +20,7 @@ Per eseguire il compilatore e generare gli eseguibili finali sono necessari i se
 * **Clang**: Compilatore C/C++ (parte della suite LLVM). È necessario per:
     1.  Compilare il runtime di supporto (`runtime.c`).
     2.  Effettuare il linking dell'eseguibile finale.
+* **GCC**: per Linking su Windows.
 
 ### Librerie Python
 Il progetto dipende dalla libreria `llvmlite` per la generazione dell'IR.
@@ -49,19 +52,19 @@ Il progetto dipende dalla libreria `llvmlite` per la generazione dell'IR.
 Il processo di creazione di un eseguibile avviene in tre passaggi: compilazione del sorgente in IR, compilazione del runtime e linking finale.
 
 ### Compilazione Sorgente -> LLVM IR
-Utilizza main.py per compilare un file .mini. Puoi usare il flag --debug per vedere i dettagli delle fasi intermedie.
+Utilizza aether.py per compilare un file ".ae" . Puoi usare il flag --debug per vedere i dettagli delle fasi intermedie.
 
-\# Generazione del codice intermedio del programma .mini
-python main.py programma.mini -o output.ll
+#### Generazione del codice intermedio del programma .ae
+    python aether.py [programma].ae -o output.ll
 
-\# Compilazione del programma
-clang --target=x86_64-pc-windows-gnu -c output.ll -o output.o
+#### Compilazione del programma
+    clang --target=x86_64-pc-windows-gnu -c output.ll -o output.o
 
-\# Compilazione delle funzioni esterne di supporto .c
-gcc -c runtime.c -o runtime.o
+#### Compilazione delle funzioni esterne di supporto .c
+    gcc -c runtime.c -o runtime.o
 
-\# Linking del codice e generazione dell'eseguibile
-gcc output.o runtime.o -o programma.exe
+#### Linking del codice e generazione dell'eseguibile
+    gcc output.o runtime.o -o [programma].exe
 
 ## 🧪 Testing
 Il progetto include una suite di test completa basata su unittest.
@@ -70,7 +73,7 @@ Eseguire tutti i test:
  python -m unittest discover tests
 
 ## ✨ Funzionalità del Linguaggio
-### Sintassi Base
+### Sintassi Base - .ae
     // Funzioni esterne (FFI)
     extern func print(n);
 
@@ -92,20 +95,18 @@ Eseguire tutti i test:
       }
     }
 
-### Caratteristiche Tecniche
-1. Tipizzazione Dinamica (Frontend) / Statica (Backend): Le variabili sono inferite, ma nel backend LLVM sono trattate come interi a 64 bit (i64).
+### ⚙️ Caratteristiche Tecniche
+1. Architettura Custom: Frontend (Lexer e Parser) implementato manualmente senza generatori automatici, con Backend basato su LLVM IR.
 
-2. Flat Scope: Le variabili definite in blocchi interni (if, while) rimangono visibili nel resto della funzione.
+2. Tipizzazione Ibrida: Sintassi a tipizzazione implicita nel frontend, compilata staticamente in interi a 64 bit (i64) per massimizzare le performance.
 
-3. Variable Shadowing: È possibile ridichiarare una variabile con let. Questo alloca nuova memoria sullo stack, rendendo inaccessibile la precedente istanza per il resto dello scope corrente.
+3. Gestione Memoria & Scope: Allocazione variabili sullo stack con supporto al Variable Shadowing (ridichiarazione sicura) e Flat Scope (visibilità estesa dai blocchi interni).
 
-4. Ottimizzazioni:
+4. Pipeline di Ottimizzazione: Modulo dedicato per Constant Folding, Dead Code Elimination e Semplificazione Algebrica direttamente sull'AST.
 
-Constant Folding: 3 + 4 * 2 viene compilato direttamente come 11.
+5. Desugaring & Funzionalità Avanzate: Trasformazione automatica di costrutti sintattici (Pipe Operator |> e cicli repeat) e gestione delle funzioni anonime (Lambda Lifting).
 
-Dead Code Elimination: while(0) { ... } viene rimosso completamente dall'eseguibile.
-
-Algebraic Simplification: x * 1 diventa x, x * 0 diventa 0.
+6. FFI (Foreign Function Interface): Interoperabilità con librerie C native tramite la keyword extern per estendere le funzionalità di I/O.
 
 ## ⚠️ Note Implementative
 ### Gestione Memoria:
