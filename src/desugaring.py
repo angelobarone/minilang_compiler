@@ -57,10 +57,15 @@ class Desugarer(NodeVisitor):
             )
         )
 
-        # While
-        new_body_stmts = self.visit(node.body).statements
-        new_body_stmts.append(increment)
+        # Controllo di sicurezza
+        visited_body = self.visit(node.body)
+        if isinstance(visited_body, ast.Block):
+            new_body_stmts = visited_body.statements
+        else:
+            new_body_stmts = [visited_body]
 
+        # While
+        new_body_stmts.append(increment)
         while_node = ast.WhileStmt(condition=condition, body=ast.Block(new_body_stmts))
 
         return [init_decl, while_node]
@@ -78,7 +83,7 @@ class Desugarer(NodeVisitor):
         if isinstance(right, ast.VariableExpr):
             return ast.CallExpr(callee=right.name, args=[left])
 
-        return node
+        raise ValueError(f"Lato destro del pipe '|>' invalido. Attesa funzione o chiamata, trovato: {type(right).__name__}")
 
     def visit_VarDecl(self, node):
         node.initializer = self.visit(node.initializer)
