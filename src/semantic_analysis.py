@@ -12,14 +12,12 @@ class SemanticAnalyzer(NodeVisitor):
         self.current_scope = set()
 
     def visit_Program(self, node):
-        # Registra tutte le funzioni
         for decl in node.declarations:
             if isinstance(decl, ast.FunctionDecl):
                 self.functions_arity[decl.name] = len(decl.params)
             elif isinstance(decl, ast.ExternDecl):
                 self.functions_arity[decl.name] = len(decl.params)
 
-        # Analizza i corpi delle funzioni
         for decl in node.declarations:
             if isinstance(decl, ast.FunctionDecl):
                 self.visit(decl)
