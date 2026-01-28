@@ -8,7 +8,7 @@ class TestLLVMCodeGen(unittest.TestCase):
     def setUp(self):
         self.codegen = LLVMCodeGen()
 
-    def assertContenutoIR(self, ir_code, expected_snippet):
+    def assertIRContains(self, ir_code, expected_snippet):
         if expected_snippet not in ir_code:
             self.fail(f"IR generato non contiene: '{expected_snippet}'\n\nIR Completo:\n{ir_code}")
 

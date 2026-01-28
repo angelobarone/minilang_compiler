@@ -8,7 +8,7 @@ class TestParser(unittest.TestCase):
     def setUp(self):
         pass
 
-    def inizializzazione_parser(self, tokens):
+    def create_parser(self, tokens):
         if not tokens or tokens[-1].type != TokenType.EOF:
             tokens.append(Token(TokenType.EOF))
         return Parser(tokens)
