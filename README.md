@@ -50,7 +50,7 @@ Il progetto dipende dalla libreria `llvmlite` per la generazione dell'IR.
 Il processo di creazione di un eseguibile avviene in tre passaggi: compilazione del sorgente in IR, compilazione del runtime e linking finale.
 
 ### Compilazione Sorgente -> LLVM IR
-Utilizza main.py per compilare un file .mini. Puoi usare il flag --debug per vedere i dettagli delle fasi intermedie.
+Utilizza aether.py per compilare un file ".ae" . Puoi usare il flag --debug per vedere i dettagli delle fasi intermedie.
 
 \# Generazione del codice intermedio del programma .mini
 python aether.py [programma].ae -o output.ll
