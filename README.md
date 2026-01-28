@@ -52,16 +52,16 @@ Il processo di creazione di un eseguibile avviene in tre passaggi: compilazione 
 ### Compilazione Sorgente -> LLVM IR
 Utilizza aether.py per compilare un file ".ae" . Puoi usare il flag --debug per vedere i dettagli delle fasi intermedie.
 
-# Generazione del codice intermedio del programma .ae
+#### Generazione del codice intermedio del programma .ae
     python aether.py [programma].ae -o output.ll
 
-# Compilazione del programma
+#### Compilazione del programma
     clang --target=x86_64-pc-windows-gnu -c output.ll -o output.o
 
-# Compilazione delle funzioni esterne di supporto .c
+#### Compilazione delle funzioni esterne di supporto .c
     gcc -c runtime.c -o runtime.o
 
-# Linking del codice e generazione dell'eseguibile
+#### Linking del codice e generazione dell'eseguibile
     gcc output.o runtime.o -o [programma].exe
 
 ## 🧪 Testing
